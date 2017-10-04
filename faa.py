@@ -18,8 +18,9 @@ class Datos(object):
         contador = 0
         with open(nombreFichero, 'r') as file:
             for line in file:
+                line = line.strip(' \t\n\r')
                 if i == 1:
-                    n_recs = int(line.strip(' \t\n\r'))
+                    n_recs = int(line)
                 elif i == 2:
                     self.nombreAtributos = line.split(self.SEP)
                     self.diccionarios = [{} for _ in range(len(self.nombreAtributos))]
@@ -27,21 +28,20 @@ class Datos(object):
                 elif i == 3:
                     types = line.split(self.SEP)
                     for _type in types:
-                        _type = _type.strip(' \t\n\r')
-                        if _type.strip() not in self.TiposDeAtributos:
+                        if _type not in self.TiposDeAtributos:
                             raise ValueError('Tipo ' + _type + ' no soportado')
                     self.tipoAtributos = types
                 else:
                     data = line.split(self.SEP)
                     for index in range(len(data)):
                         if self.tipoAtributos[index] == 'Continuo':
-                            self.datos[i - 4][index] = data[index].strip(' \t\n\r')
+                            self.datos[i - 4][index] = data[index]
                         else:
                             if data[index].strip(' \t\n\r') in self.diccionarios[index]:
-                                self.datos[i - 4][index] = self.diccionarios[index][data[index].strip(' \t\n\r')]
+                                self.datos[i - 4][index] = self.diccionarios[index][data[index]]
                             else:
                                 self.datos[i - 4][index] = contador
-                                self.diccionarios[index][data[index].strip(' \t\n\r')] = contador
+                                self.diccionarios[index][data[index]] = contador
                                 contador += 1
                 i += 1
 
