@@ -7,6 +7,7 @@ class Datos(object):
     nombreAtributos = []
     nominalAtributos = []
     datos = np.array(())
+
     SEP = ','
     # Lista de diccionarios. Uno por cada atributo.
     diccionarios = []
@@ -37,7 +38,7 @@ class Datos(object):
                         if self.tipoAtributos[index] == 'Continuo':
                             self.datos[i - 4][index] = data[index]
                         else:
-                            if data[index].strip(' \t\n\r') in self.diccionarios[index]:
+                            if data[index] in self.diccionarios[index]:
                                 self.datos[i - 4][index] = self.diccionarios[index][data[index]]
                             else:
                                 self.datos[i - 4][index] = contador
@@ -64,3 +65,7 @@ class Datos(object):
 
     def extraeDatosTest(idx):
         pass
+
+
+
+  
