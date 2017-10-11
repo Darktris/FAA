@@ -59,13 +59,8 @@ class Datos(object):
                     self.diccionarios[i][key] = contador
                     contador += 1
 
-    # TODO: implementar en la práctica 1
-    def extraeDatosTrain(idx):
-        pass
+    def extraeDatosTrain(self, idx):
+        return np.take(self.datos,idx,axis=0)
 
-    def extraeDatosTest(idx):
-        pass
-
-
-
-  
+    def extraeDatosTest(self, idx):
+        return np.take(self.datos,idx,axis=0)
