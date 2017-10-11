@@ -2,8 +2,8 @@ import sys, os
 
 sys.path.append(os.path.join(os.path.dirname(__file__)))
 
-from EstrategiasParticionado.EstrategiaParticionado import EstrategiaParticionado
-from EstrategiasParticionado.Particion import Particion
+from estrategiasparticionado.estrategias_particionado import EstrategiaParticionado
+from estrategiasparticionado.particion import Particion
 import numpy as np
 import random
 
