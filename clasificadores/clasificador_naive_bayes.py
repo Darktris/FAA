@@ -10,35 +10,44 @@ class ClasificadorNaiveBayes(Clasificador):
     clase = []
     # Formula de Bayes: P(hip|datos) = P(datos|hip)*P(hip) = vero*priori
     def entrenamiento(self, datostrain, atributosDiscretos, diccionario):
+
         numero_atributos = len(datostrain[0, :])
-        col_clases = np.asarray(datostrain[:, numero_atributos-1])
-        self.priori = np.asarray(self.crearHistograma(col_clases))/len(col_clases)
-        self.clases = np.asarray((diccionario[numero_atributos-1].keys()))
-        self.posteriori = (numero_atributos-1)*[None]
-        self.posteriori_args = (numero_atributos-1)*[None]
-        for i in range(numero_atributos-1):
-            discreto = atributosDiscretos[i]
-            columna = datostrain[:,i]
-            columnaClasificada = zip(columna, col_clases)
-            self.posteriori_args[i] = {}
-            self.posteriori[i] = {}
+        col_clases = np.asarray(datostrain[:, -1])
+
+        self.priori = np.asarray(self.crearHistograma(col_clases))
+        self.clases = np.asarray(list(diccionario[-1].keys()))
+        self.posteriori = [None]*(numero_atributos-1)
+        self.posteriori_args = [None]*(numero_atributos-1)
+
+        # from IPython.core.debugger import Tracer;
+        # Tracer()()
+
+        for indice in range(numero_atributos-1):
+            discreto = atributosDiscretos[indice]
+            columna = datostrain[:,indice]
+
+            self.posteriori_args[indice] = {}
+            self.posteriori[indice] = {}
+
             #print(self.clases)
             if discreto:
-                hist = np.asarray(self.crearHistograma(columna))
                 for i_clase in range(len(self.clases)):
                     clase = self.clases[i_clase]
-                    self.posteriori_args[i][clase] = {}
-                    #
-                    hist = np.asarray(self.crearHistograma(columnaClasificada[col_clases == clase]))/len(columnaClasificada[col_clases == clase])
-                    self.posteriori_args[i][clase]['hist'] = hist*self.priori[clase==self.clases]
-                    from IPython.core.debugger import Tracer; Tracer()()
-                    self.posteriori[i][clase] = self.posterioriDiscreto
+                    self.posteriori_args[indice][clase] = {}
+
+                    attribute_filtered = [elem for index, elem in enumerate(columna) if (col_clases[index] == clase)]
+                    hist = np.asarray(self.crearHistograma(attribute_filtered))
+
+                    self.posteriori_args[indice][clase]['hist'] = self.priori[i_clase]*hist
+
+                    # from IPython.core.debugger import Tracer; Tracer()()
+                    self.posteriori[indice][clase] = self.posterioriDiscreto
             else:
-                self.posteriori_args[i][clase] = {}
-                self.posteriori_args[i][clase]['mu'] = np.mean(columna)
-                self.posteriori_args[i][clase]['sigma'] = np.var(columna)
-                self.posteriori_args[i][clase]['priori'] = self.priori[clase==self.clases]
-                self.posteriori[i][clase] = self.posterioriContinuo
+                self.posteriori_args[indice][clase] = {}
+                self.posteriori_args[indice][clase]['mu'] = np.mean(columna)
+                self.posteriori_args[indice][clase]['sigma'] = np.var(columna)
+                self.posteriori_args[indice][clase]['priori'] = self.priori[clase==self.clases]
+                self.posteriori[indice][clase] = self.posterioriContinuo
     
     def posterioriDiscreto(self, x, argumentos):
         hist = argumentos['hist']
@@ -55,7 +64,16 @@ class ClasificadorNaiveBayes(Clasificador):
         return float(norm.pdf(x, mu, sigma)*priori)
     
     def crearHistograma(self, x):
-        return np.histogram(x, bins=len(np.unique(x)-1))[0]
+
+        hist = np.ndarray(shape=(len(x),1))
+        bins = sorted(np.unique(x))
+        total = len(x)
+
+        for index, bin in enumerate(bins):
+            hist[index] = (x == bin).sum() / total
+
+        return hist
+
 
     def clasifica(self, datostest, atributosDiscretos, diccionario):
         resultado = []
@@ -65,7 +83,7 @@ class ClasificadorNaiveBayes(Clasificador):
                 prob[clase] = 1.0
                 for fieldIndex in range(len(record)):
                     prob[clase] *= self.posteriori[fieldIndex][clase](record[fieldIndex], self.posteriori_args[fieldIndex][clase])
-                from IPython.core.debugger import Tracer; Tracer()()
+
 
             clase = np.argmax(prob)
             resultado.append(clase)
