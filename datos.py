@@ -31,7 +31,13 @@ class Datos(object):
                     for _type in types:
                         if _type not in self.TiposDeAtributos:
                             raise ValueError('Tipo ' + _type + ' no soportado')
+                        if _type == 'Nominal':
+                            self.nominalAtributos.append(True)
+                        else:
+                            self.nominalAtributos.append(False)
                     self.tipoAtributos = types
+                    self.nominalAtributos = np.asarray(types) == 'Nominal'
+                    
                 else:
                     data = line.split(self.SEP)
                     for index in range(len(data)):

@@ -1,11 +1,13 @@
 from abc import ABCMeta,abstractmethod
-
+import numpy as np
 
 class Clasificador(object):
   
   # Clase abstracta
   __metaclass__ = ABCMeta
-  
+  particiones = []
+  errores = []
+
   # Metodos abstractos que se implementan en casa clasificador concreto
   @abstractmethod
   # TODO: esta funcion deben ser implementadas en cada clasificador concreto
@@ -28,22 +30,32 @@ class Clasificador(object):
   # TODO: implementar
   def error(self,datos,pred):
     # Aqui se compara la prediccion (pred) con las clases reales y se calcula el error    
-    pass
+    #prediccion = self.clasifica(datos, )
+    return np.sum(prediccion != pred)/len(pred)
+    
+    
     
     
   # Realiza una clasificacion utilizando una estrategia de particionado determinada
   # TODO: implementar esta funcion
-  def validacion(self,particionado,dataset,clasificador,seed=None):
+  def validacion(self, particionado, dataset, seed=None):
        
     # Creamos las particiones siguiendo la estrategia llamando a particionado.creaParticiones
     # - Para validacion cruzada: en el bucle hasta nv entrenamos el clasificador con la particion de train i
     # y obtenemos el error en la particion de test i
     # - Para validacion simple (hold-out): entrenamos el clasificador con la particion de train
     # y obtenemos el error en la particion test
-    particiones = particionado.creaParticiones(dataset.Datos)
-    for particion in particiones:
-        dataset.extraeDatosTrain(particion.indicesTrain)
-        self.entrenamiento(dataset.datos, dataset.tipoAtributos == Nominal, dataset.diccionarios)
+    self.particiones = particionado.creaParticiones(dataset.datos)
+    self.errores = []
+    for particion in self.particiones:
+        entrenamiento = dataset.extraeDatosTrain(particion.indicesTrain)
+        validacion = dataset.extraeDatosTest(particion.indicesTrain)
+        pred = validacion[:, -1]
+        attr = validacion[:,:-1]
+        self.entrenamiento(entrenamiento, dataset.nominalAtributos, dataset.diccionarios)
+        prediccion = self.clasifica(attr, dataset.nominalAtributos, dataset.diccionarios)
+        error = np.sum(prediccion != pred)/len(pred)
+        self.errores.append(error)
 		
 
        
