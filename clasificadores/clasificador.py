@@ -31,7 +31,7 @@ class Clasificador(object):
   def error(self,datos,pred):
     # Aqui se compara la prediccion (pred) con las clases reales y se calcula el error    
     #prediccion = self.clasifica(datos, )
-    return np.sum(prediccion != pred)/len(pred)
+    return float(np.sum(prediccion != pred))/len(pred)
     
     
     
@@ -54,7 +54,7 @@ class Clasificador(object):
         attr = validacion[:,:-1]
         self.entrenamiento(entrenamiento, dataset.nominalAtributos, dataset.diccionarios)
         prediccion = self.clasifica(attr, dataset.nominalAtributos, dataset.diccionarios)
-        error = np.sum(prediccion != pred)/len(pred)
+        error = float(np.sum(prediccion != pred))/len(pred)
         self.errores.append(error)
 		
 
