@@ -23,26 +23,28 @@ class ClasificadorNaiveBayes(Clasificador):
         self.prioris = [None] * numero_clases
 
         for indice_clase, clase in enumerate(diccionario[-1].values()):
+
             indices_casos_totales = datostrain[:, -1] == clase
             cardinalidad_clase = indices_casos_totales.sum()
             self.prioris[indice_clase] = cardinalidad_clase / len(datostrain[:, -1])
 
-        for indice_atributo in range(numero_atributos):
-            # Una tabla por atributo
-            numero_valores_atributo = len(diccionario[indice_atributo].keys())
-            self.lista_tablas_probabilidades[indice_atributo] = np.ndarray(shape=(numero_valores_atributo, numero_clases))
+            for indice_atributo in range(numero_atributos):
+                # Una tabla por atributo
+                numero_valores_atributo = len(diccionario[indice_atributo].keys())
+                dictionary = [(value , 0) for value in diccionario[indice_atributo].values()]
+                self.lista_tablas_probabilidades[indice_atributo] = [dict(dictionary)] * numero_clases
 
-            if atributosDiscretos[indice_atributo]:
-                # Caso discreto
+                if atributosDiscretos[indice_atributo]:
+                    # Caso discreto
+                    for valor_atributo in diccionario[indice_atributo].values():
+                        indices_casos_favorables = (datostrain[:, indice_atributo] == valor_atributo) & (datostrain[:, -1] == clase)
+                        numero_casos_favorables = indices_casos_favorables.sum()
 
-                for indice_valor, valor in enumerate(diccionario[indice_atributo].values()):
-                    indices_casos_favorables = (datostrain[:, indice_atributo] == valor) & (datostrain[:, -1] == clase)
-                    numero_casos_favorables = indices_casos_favorables.sum()
-                    self.lista_tablas_probabilidades[indice_atributo][indice_valor][
-                        indice_clase] = numero_casos_favorables / cardinalidad_clase
-            else:
-                # TODO: Caso continuo
-                pass
+                        self.lista_tablas_probabilidades[indice_atributo][indice_clase][valor_atributo] = numero_casos_favorables / cardinalidad_clase
+
+                else:
+                    # TODO: Caso continuo
+                    pass
 
 
     def posterioriContinuo(self, x, argumentos):
@@ -55,13 +57,22 @@ class ClasificadorNaiveBayes(Clasificador):
     def clasifica(self, datostest, atributosDiscretos, diccionario):
         #TODO: Terminar
 
-        probabilidades = np.asarray( [ self.prioris[indice_clase] for indice_clase in diccionario[-1].values() ] * len(datostest))
+        # print(len(self.lista_tablas_probabilidades))
+        # for tabla in self.lista_tablas_probabilidades:
+        #     print(tabla)
 
-        for fila in datostest:
-            for indice_atributo, indice_valor_atributo in enumerate(fila[:-1]):
+        probabilidades = np.asarray([[ self.prioris[indice_clase] for indice_clase in diccionario[-1].values() ]] * len(datostest))
+
+
+        for indice_fila, fila in enumerate(datostest):
+            for indice_atributo, valor_atributo in enumerate(fila[:-1]):
                 for indice_clase in diccionario[-1].values():
-                    probabilidades[indice_clase]*=self.lista_tablas_probabilidades[indice_atributo][indice_valor_atributo][indice_clase]
+                    probabilidades[indice_fila][indice_clase]*=self.lista_tablas_probabilidades[indice_atributo][indice_clase][valor_atributo]
 
-        prediccion = map(lambda prob: np.argmax(prob), probabilidades)
+
+        for probabilidad in probabilidades:
+            print(probabilidad)
+
+        print(prediccion)
 
         return prediccion
