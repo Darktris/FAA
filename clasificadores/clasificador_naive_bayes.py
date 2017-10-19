@@ -45,29 +45,23 @@ class ClasificadorNaiveBayes(Clasificador):
                 pass
 
 
-def posterioriContinuo(self, x, argumentos):
-    mu = argumentos['mu']
-    sigma = argumentos['sigma']
-    priori = argumentos['priori']
-    return float(norm.pdf(x, mu, sigma) * priori)
+    def posterioriContinuo(self, x, argumentos):
+        mu = argumentos['mu']
+        sigma = argumentos['sigma']
+        priori = argumentos['priori']
+        return float(norm.pdf(x, mu, sigma) * priori)
 
 
-def clasifica(self, datostest, atributosDiscretos, diccionario):
-    #TODO: Terminar
-    for fila in datostest:
-        for indice_atributo, _ in enumerate(fila[:-1]):
+    def clasifica(self, datostest, atributosDiscretos, diccionario):
+        #TODO: Terminar
 
+        probabilidades = np.asarray( [ self.prioris[indice_clase] for indice_clase in diccionario[-1].values() ] * len(datostest))
 
+        for fila in datostest:
+            for indice_atributo, indice_valor_atributo in enumerate(fila[:-1]):
+                for indice_clase in diccionario[-1].values():
+                    probabilidades[indice_clase]*=self.lista_tablas_probabilidades[indice_atributo][indice_valor_atributo][indice_clase]
 
-    for record in datostest:
-        prob = {}
-        for clase in self.clases:
-            prob[clase] = 1.0
-            for fieldIndex in range(len(record)):
-                prob[clase] *= self.posteriori[fieldIndex][clase](record[fieldIndex],
-                                                                  self.posteriori_args[fieldIndex][clase])
+        prediccion = map(lambda prob: np.argmax(prob), probabilidades)
 
-        clase = np.argmax(prob)
-        resultado.append(clase)
-
-    return resultado
+        return prediccion
