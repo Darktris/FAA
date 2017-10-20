@@ -54,8 +54,8 @@ class Clasificador(object):
         attr = validacion[:,:-1]
         self.entrenamiento(entrenamiento, dataset.nominalAtributos, dataset.diccionarios)
         prediccion = self.clasifica(attr, dataset.nominalAtributos, dataset.diccionarios)
-        #error = float(np.sum(prediccion != pred))/len(pred)
-        #self.errores.append(error)
+        error = float(np.sum(prediccion != pred))/len(pred)
+        self.errores.append(error)
 		
 
        
