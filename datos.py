@@ -16,7 +16,9 @@ class Datos(object):
     # tipoAtributos, nombreAtributos,nominalAtributos, datos y diccionarios
     def __init__(self, nombreFichero):
         i = 1
-        contador = 0
+        contador = 0.5
+        n_recs = 0
+
         with open(nombreFichero, 'r') as file:
             for line in file:
                 line = line.strip(' \t\n\r')
@@ -27,21 +29,18 @@ class Datos(object):
                     self.diccionarios = [{} for _ in range(len(self.nombreAtributos))]
                     self.datos = np.empty([n_recs, len(self.nombreAtributos)])
                 elif i == 3:
-                    types = line.split(self.SEP)
-                    for _type in types:
-                        if _type not in self.TiposDeAtributos:
-                            raise ValueError('Tipo ' + _type + ' no soportado')
-                        if _type == 'Nominal':
-                            self.nominalAtributos.append(True)
-                        else:
-                            self.nominalAtributos.append(False)
+                    types = np.asarray(line.split(self.SEP))
+                    index_types = (types != 'Nominal') & (types != 'Continuo')
+                    if sum(index_types) != 0:
+                            raise ValueError('Tipo ' + types[index_types] + ' no soportado')
+
+                    self.nominalAtributos = (types == 'Nominal')
                     self.tipoAtributos = types
-                    self.nominalAtributos = np.asarray(types) == 'Nominal'
                     
                 else:
                     data = line.split(self.SEP)
                     for index in range(len(data)):
-                        if self.tipoAtributos[index] == 'Continuo':
+                        if not self.nominalAtributos[index]:
                             self.datos[i - 4][index] = data[index]
                         else:
                             if data[index] in self.diccionarios[index]:
@@ -52,18 +51,12 @@ class Datos(object):
                                 contador += 1
                 i += 1
 
-            # Correcion de los valores del diccionario
-            for i in range(len(self.diccionarios)):
-                contador = 0
-                for key in sorted(self.diccionarios[i].keys()):
-
-                    copia = np.array(self.datos[:, i], copy=True)
-
-                    for j in range(len(copia)):
-                        if copia[j] == self.diccionarios[i][key]:
-                            self.datos[j, i] = contador
-                    self.diccionarios[i][key] = contador
-                    contador += 1
+            # Check for problems!:
+            for indice_diccionario, diccionario in enumerate(self.diccionarios):
+                for indice_key, key in enumerate(sorted(diccionario.keys())):
+                    indices_actualizar = (self.datos[:,indice_diccionario] == diccionario[key])
+                    self.datos[indices_actualizar,indice_diccionario] = indice_key
+                    diccionario[key] = indice_key
 
     def extraeDatosTrain(self, idx):
         return np.take(self.datos,idx,axis=0)
