@@ -36,7 +36,7 @@ class ClasificadorNaiveBayes(Clasificador):
             self.cardinalidades_clase[clase] = float(np.sum(indices_casos_totales))
 
             # Priori: datos de esa clase / datos totales
-            self.prioris[clase] = self.cardinalidades_clase[clase] / tamano_train
+            self.prioris[clase] = float(self.cardinalidades_clase[clase]) / float(tamano_train)
 
         # Para cada atributo
         for indice_atributo in range(numero_atributos):
@@ -63,12 +63,12 @@ class ClasificadorNaiveBayes(Clasificador):
                         indices_casos_favorables = (datostrain[:, indice_atributo] == valor_atributo) & (
                             datostrain[:, -1] == clase)
                         # Numero de casos favorables
-                        numero_casos_favorables = float(np.sum(indices_casos_favorables))
+                        numero_casos_favorables = np.sum(indices_casos_favorables)
                         # Verosimilitud es numero de casos favorables entre todos los de la clase
                         numerador = numero_casos_favorables + self.laplace_smoothing
                         denominador = (self.cardinalidades_clase[clase] + self.laplace_smoothing
                                        * numero_valores_atributo * numero_atributos)
-                        probabilidad = numerador / denominador
+                        probabilidad = float(numerador) / float(denominador)
 
                         self.probabilidades[indice_atributo][valor_atributo][clase] = probabilidad
 
@@ -90,7 +90,7 @@ class ClasificadorNaiveBayes(Clasificador):
 
     def print_probabilidades(self, diccionario):
 
-        print("Numero atributos:")
+        print("Numero atributos:", len(diccionario) - 1)
         print("Priroris:")
         for clase in self.clases:
             print("\tClase:", clase, "prob:", self.prioris[clase])
@@ -110,16 +110,17 @@ class ClasificadorNaiveBayes(Clasificador):
         #     print(tabla)
 
         # Inicializamos con las probabilidades a priori para cada clase
-        self.print_probabilidades(diccionario)
+        # Datos_test NO incluye la clase
+        # self.print_probabilidades(diccionario)
 
-        probabilidades = [dict(self.prioris) for _ in datostest[:, -1]]
-        probabilidades[0][0] = 1
+        probabilidades = [dict(self.prioris) for _ in datostest]
 
         # Para cada registro del dataset de clasificacion
         for indice_fila, fila in enumerate(datostest):
             # Para cada atributo del registro
             # print("Fila:",fila)
-            for indice_atributo, valor_atributo in enumerate(fila[:-1]):
+            # print(probabilidades[indice_fila],"-->")
+            for indice_atributo, valor_atributo in enumerate(fila):
                 # Para cada clase
                 for clase in self.clases:
                     # if indice_fila == 0:
@@ -129,31 +130,32 @@ class ClasificadorNaiveBayes(Clasificador):
                     # print("Prob c1:", probabilidades[indice_fila][0])
                     # print("Prob c2:", probabilidades[indice_fila][1])
                     if atributosDiscretos[indice_atributo]:
-                        #print(fila)
-                        #print("Clase:",clase,self.prioris[clase])
-                        #print("Atributo:",indice_atributo,"valor",valor_atributo)
-                        #print("Prob:",self.probabilidades[indice_atributo][valor_atributo][clase])
-                        probabilidades[indice_fila][clase] *= (self.probabilidades[indice_atributo][valor_atributo][
-                                                                   clase] / self.factores[indice_atributo][
-                                                                   valor_atributo])
-                        #print("Actual:",probabilidades[indice_fila][clase])
+                        # print("Atributo:",indice_atributo,"valor",valor_atributo,"priori:",self.factores[indice_atributo][valor_atributo])
+                        # print("Clase:",clase,self.prioris[clase])
+                        # print("Prob:",self.probabilidades[indice_atributo][valor_atributo][clase])
+                        # print("*=",self.probabilidades[indice_atributo][valor_atributo][clase],"/",self.factores[indice_atributo][
+                        #                                           valor_atributo])
+                        probabilidades[indice_fila][clase] *= float(
+                            self.probabilidades[indice_atributo][valor_atributo][
+                                clase]) / float(self.factores[indice_atributo][
+                                                    valor_atributo])
+                        # print("Actual:",probabilidades[indice_fila][clase])
                     else:
                         mu = self.parametros_normales[indice_atributo]['mu']
                         sigma = self.parametros_normales[indice_atributo]['sigma']
                         if sigma != 0:
                             probabilidades[indice_fila][clase] *= float(norm.pdf(valor_atributo, mu, sigma))
-                            # print(probabilidades[indice_fila])
+                            # print("-->",probabilidades[indice_fila])
 
         # print("END")
 
-        comparativa = []
+        prediccion = []
         for probabilidad in probabilidades:
-            fila = []
-            for clase in self.clases:
-                fila.append(probabilidad[clase])
-            #print(fila)
-            comparativa.append(fila)
-        print(comparativa)
-        prediccion = np.argmax(comparativa, axis=1)
+            probabilidades_clase = list(probabilidad.values())
+            clases = list(probabilidad.keys())
+
+            indice_prediccion = np.argmax(probabilidades_clase)
+            clase_predicha = clases[indice_prediccion]
+            prediccion.append(clase_predicha)
 
         return prediccion

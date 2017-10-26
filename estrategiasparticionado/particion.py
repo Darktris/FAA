@@ -1,4 +1,3 @@
-
 class Particion():
     indicesTrain = []
     indicesTest = []

@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod
+
 import numpy as np
 
 
@@ -21,7 +22,6 @@ class Clasificador(object):
     # devuelve un numpy array con las predicciones
     def clasifica(self, datosTest, atributosDiscretos, diccionario):
         pass
-
 
     # Realiza una clasificacion utilizando una estrategia de particionado determinada
     def validacion(self, particionado, dataset, seed=None):

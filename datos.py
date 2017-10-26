@@ -32,11 +32,11 @@ class Datos(object):
                     types = np.asarray(line.split(self.SEP))
                     index_types = (types != 'Nominal') & (types != 'Continuo')
                     if sum(index_types) != 0:
-                            raise ValueError('Tipo ' + types[index_types] + ' no soportado')
+                        raise ValueError('Tipo ' + types[index_types] + ' no soportado')
 
                     self.nominalAtributos = (types == 'Nominal')
                     self.tipoAtributos = types
-                    
+
                 else:
                     data = line.split(self.SEP)
                     for index in range(len(data)):
@@ -54,12 +54,12 @@ class Datos(object):
             # Check for problems!:
             for indice_diccionario, diccionario in enumerate(self.diccionarios):
                 for indice_key, key in enumerate(sorted(diccionario.keys())):
-                    indices_actualizar = (self.datos[:,indice_diccionario] == diccionario[key])
-                    self.datos[indices_actualizar,indice_diccionario] = indice_key
-                    diccionario[key] = indice_key
+                    indices_actualizar = (self.datos[:, indice_diccionario] == diccionario[key])
+                    self.datos[indices_actualizar, indice_diccionario] = float(-indice_key - 1)
+                    diccionario[key] = float(-indice_key - 1)
 
     def extraeDatosTrain(self, idx):
-        return np.take(self.datos,idx,axis=0)
+        return np.take(self.datos, idx, axis=0)
 
     def extraeDatosTest(self, idx):
-        return np.take(self.datos,idx,axis=0)
+        return np.take(self.datos, idx, axis=0)
