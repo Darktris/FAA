@@ -18,6 +18,7 @@ class ClasificadorNaiveBayes(Clasificador):
 
         numero_atributos = len(diccionario) - 1
         tamano_train = len(datostrain[:, -1])
+        numero_clases = len(diccionario[-1].keys())
         self.clases = diccionario[-1].values()
 
         # Inicializamos
@@ -67,7 +68,7 @@ class ClasificadorNaiveBayes(Clasificador):
                         # Verosimilitud es numero de casos favorables entre todos los de la clase
                         numerador = numero_casos_favorables + self.laplace_smoothing
                         denominador = (self.cardinalidades_clase[clase] + self.laplace_smoothing
-                                       * numero_valores_atributo * numero_atributos)
+                                       * numero_valores_atributo * numero_clases)
                         probabilidad = float(numerador) / float(denominador)
 
                         self.probabilidades[indice_atributo][valor_atributo][clase] = probabilidad

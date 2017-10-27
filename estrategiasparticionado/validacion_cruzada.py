@@ -7,6 +7,7 @@ from estrategiasparticionado.estrategias_particionado import EstrategiaParticion
 from estrategiasparticionado.particion import Particion
 import numpy as np
 import random
+from functools import reduce
 
 
 class ValidacionCruzada(EstrategiaParticionado):
@@ -40,7 +41,7 @@ class ValidacionCruzada(EstrategiaParticionado):
         for i in range(numero_no_alineados):
             indices_particiones[i] = np.append(indices_particiones_alineados[i], indices_no_alineados[i])
 
-        # cuando hemos terminado de distribuir lso no alineados, insertamos los que no necesitan
+        # cuando hemos terminado de distribuir los no alineados, insertamos los que no necesitan
         # que se les annada ningun indice al final, tendran un elemento menos estas ultimas particiones
         for i in range(numero_no_alineados, self.nfolds):
             indices_particiones[i] = indices_particiones_alineados[i]
@@ -49,8 +50,24 @@ class ValidacionCruzada(EstrategiaParticionado):
         self.particiones = [Particion() for _ in range(self.nfolds)]
 
         for particion, index in zip(self.particiones, range(self.nfolds)):
-            particion.indicesTrain = indices_particiones[index]
-            particion.indicesTest = indices_particiones[:index] + indices_particiones[index + 1:]
+            particion.indicesTest = indices_particiones[index]
+            
+            def pegar(x,y):
+                return np.append(x,y)
+            
+            if index > 0 and index < len(self.particiones) -1:
+                indices_izq = reduce(pegar,indices_particiones[:index])
+                indices_dcha = reduce(pegar,indices_particiones[index+1:])
+                particion.indicesTrain = np.append(indices_izq,indices_dcha)
+                print("ffff",indices_izq)
+                print("ffff",indices_dcha)
+            elif index ==0:
+                particion.indicesTrain = reduce(pegar,indices_particiones[1:])
+            else:
+                particion.indicesTrain = reduce(pegar,indices_particiones[:-1])
+                
+            print("ffff",particion.indicesTrain)
+            
 
         self.numeroParticiones = self.nfolds
 

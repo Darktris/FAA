@@ -55,8 +55,9 @@ class Datos(object):
             for indice_diccionario, diccionario in enumerate(self.diccionarios):
                 for indice_key, key in enumerate(sorted(diccionario.keys())):
                     indices_actualizar = (self.datos[:, indice_diccionario] == diccionario[key])
-                    self.datos[indices_actualizar, indice_diccionario] = float(-indice_key - 1)
-                    diccionario[key] = float(-indice_key - 1)
+                    self.datos[indices_actualizar, indice_diccionario] = float(indice_key)
+                    diccionario[key] = float(indice_key)
+        
 
     def extraeDatosTrain(self, idx):
         return np.take(self.datos, idx, axis=0)
