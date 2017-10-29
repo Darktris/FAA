@@ -59,14 +59,11 @@ class ValidacionCruzada(EstrategiaParticionado):
                 indices_izq = reduce(pegar,indices_particiones[:index])
                 indices_dcha = reduce(pegar,indices_particiones[index+1:])
                 particion.indicesTrain = np.append(indices_izq,indices_dcha)
-                print("ffff",indices_izq)
-                print("ffff",indices_dcha)
             elif index ==0:
                 particion.indicesTrain = reduce(pegar,indices_particiones[1:])
             else:
                 particion.indicesTrain = reduce(pegar,indices_particiones[:-1])
                 
-            print("ffff",particion.indicesTrain)
             
 
         self.numeroParticiones = self.nfolds
