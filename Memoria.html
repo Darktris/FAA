@@ -11726,7 +11726,9 @@ body {
 div#notebook {
   overflow: visible;
   border-top: none;
-}@media print {
+}
+
+@media print {
   div.cell {
     display: block;
     page-break-inside: avoid;
@@ -11747,7 +11749,7 @@ div#notebook {
 
 <!-- Loading mathjax macro -->
 <!-- Load mathjax -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
     <!-- MathJax configuration -->
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
@@ -11771,13 +11773,14 @@ div#notebook {
   <div tabindex="-1" id="notebook" class="border-box-sizing">
     <div class="container" id="notebook-container">
 
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Pr&#225;ctica-1-Validaci&#243;n-simple-y-cruzada-y-Naive-Bayes">Pr&#225;ctica 1 Validaci&#243;n simple y cruzada y Naive-Bayes<a class="anchor-link" href="#Pr&#225;ctica-1-Validaci&#243;n-simple-y-cruzada-y-Naive-Bayes">&#182;</a></h1><h2 id="Validaci&#243;n-cruzada-y-simple">Validaci&#243;n cruzada y simple<a class="anchor-link" href="#Validaci&#243;n-cruzada-y-simple">&#182;</a></h2><p>En esta práctica se han implementado dos estrategias de validación:</p>
 <ul>
-<li>Validación simple: el conjunto se divide en dos conjuntos, entrenamiento y test según un porcentaje configurable. Se realiza un shuffle previo a los datos.</li>
+<li>Validación simple: el conjunto de datos se divide en dos subconjuntos, entrenamiento y test según un porcentaje configurable. Se realiza un shuffle previo a los datos para evitar sesgos en las particiones.</li>
 </ul>
 
 </div>
@@ -11812,9 +11815,7 @@ div#notebook {
 
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Partición 1
@@ -11828,12 +11829,13 @@ Validación [181 860  10 332 957 676 931 139 270 145 567  90 484 462 233] ...
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>Validación cruzada se crean K-folds, esto es K particiones de los datos en entrenamiento y test. Cada partición j tendrá a la j-ésima partición como test y el resto para entrenamiento.</li>
+<li>Validación cruzada: se crean K-folds, esto es K particiones de los datos para entrenamiento y test. Cada partición j tendrá a la j-ésima partición como test y el resto para entrenamiento.</li>
 </ul>
 
 </div>
@@ -11864,9 +11866,7 @@ Validación [181 860  10 332 957 676 931 139 270 145 567  90 484 462 233] ...
 
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Partición 1
@@ -11907,7 +11907,8 @@ Validación [634 872 401 651 822 550 228 380  31 468 912 957 438 507 391] ...
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -11938,9 +11939,7 @@ Validación [634 872 401 651 822 550 228 380  31 468 912 957 438 507 391] ...
 
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Error: [0.2865671641791045]
@@ -11952,7 +11951,8 @@ Validación [634 872 401 651 822 550 228 380  31 468 912 957 438 507 391] ...
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -11981,9 +11981,7 @@ Validación [634 872 401 651 822 550 228 380  31 468 912 957 438 507 391] ...
 
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Error: [0.2671641791044776]
@@ -11995,7 +11993,8 @@ Validación [634 872 401 651 822 550 228 380  31 468 912 957 438 507 391] ...
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -12025,9 +12024,7 @@ Validación [634 872 401 651 822 550 228 380  31 468 912 957 438 507 391] ...
 
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Errores: [0.2853828306264501, 0.2819025522041763, 0.2923433874709977, 0.29814385150812067, 0.302784222737819, 0.2888631090487239, 0.30162412993039445, 0.29814385150812067, 0.3047508690614137, 0.28157589803012745]
@@ -12040,7 +12037,8 @@ Error: 0.2936 +- 0.0166
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -12070,9 +12068,7 @@ Error: 0.2936 +- 0.0166
 
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Errores: [0.29350348027842227, 0.27262180974477956, 0.302784222737819, 0.2888631090487239, 0.2923433874709977, 0.29698375870069604, 0.28074245939675174, 0.2819025522041763, 0.2954808806488992, 0.2966396292004635]
@@ -12085,7 +12081,8 @@ Error: 0.2902 +- 0.0174
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -12114,9 +12111,7 @@ Error: 0.2902 +- 0.0174
 
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Error: [0.23857142857142857]
@@ -12128,7 +12123,8 @@ Error: 0.2902 +- 0.0174
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -12157,9 +12153,7 @@ Error: 0.2902 +- 0.0174
 
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Error: [0.24]
@@ -12171,7 +12165,8 @@ Error: 0.2902 +- 0.0174
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -12201,9 +12196,7 @@ Error: 0.2902 +- 0.0174
 
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Errores: [0.23333333333333334, 0.24222222222222223, 0.2511111111111111, 0.23555555555555555, 0.22444444444444445, 0.23777777777777778, 0.23555555555555555, 0.2311111111111111, 0.24222222222222223, 0.24444444444444444]
@@ -12216,7 +12209,8 @@ Error: 0.2378 +- 0.0143
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -12246,9 +12240,7 @@ Error: 0.2378 +- 0.0143
 
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Errores: [0.24222222222222223, 0.2588888888888889, 0.23444444444444446, 0.22555555555555556, 0.24, 0.26, 0.2311111111111111, 0.2388888888888889, 0.23444444444444446, 0.23]
@@ -12261,12 +12253,13 @@ Error: 0.2396 +- 0.0220
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Apartado-2-An&#225;lisis">Apartado 2 An&#225;lisis<a class="anchor-link" href="#Apartado-2-An&#225;lisis">&#182;</a></h3><p>Los resultados obtenidos son satisfactorios con errores entre el 20% y el 30% dependiendo el dataset. En concreto, en el dataset de <em>tic-tac-toe</em> la corrección de Laplace aporta un valor añadido ya que hay muchas particiones en las que faltan datos de una clase y esto provoca una predicción erronea. En el dataset de german, por otro lado, solo parece aportar ruído ya que esto no parece afectar a la predicción.</p>
-<p>En todos los casos se ve como la validación cruzada obtiene un error medio menor, ya que dentro de la muestra se ven valores a veces muy bajos o a veces muy altos. (std = 5%)</p>
+<h3 id="Apartado-2-An&#225;lisis">Apartado 2 An&#225;lisis<a class="anchor-link" href="#Apartado-2-An&#225;lisis">&#182;</a></h3><p>Los resultados obtenidos son satisfactorios con errores entre el 20% y el 30% dependiendo del dataset. En concreto, en el dataset de <em>tic-tac-toe</em> la corrección de Laplace aporta un valor añadido ya que hay muchas particiones en las que faltan datos de una clase y esto provoca una predicción erronea. En el dataset de <em>german</em>, por otro lado, solo parece aportar ruído ya que esto no parece afectar a la predicción.</p>
+<p>En general se ve que la validación cruzada obtiene un error medio menor, ya que dentro de la muestra se ven valores a veces muy bajos o a veces muy altos. (stddev = 5%)</p>
 
 </div>
 </div>
@@ -12296,9 +12289,7 @@ Error: 0.2396 +- 0.0220
 
 
 <div class="output_area">
-
 <div class="prompt output_prompt">Out[11]:</div>
-
 
 
 
@@ -12309,9 +12300,7 @@ Error: 0.2396 +- 0.0220
 </div>
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 
 
@@ -12491,9 +12480,7 @@ CzMzK/T/ARwkqKGzzU0pAAAAAElFTkSuQmCC
 
 
 <div class="output_area">
-
 <div class="prompt output_prompt">Out[12]:</div>
-
 
 
 
@@ -12504,9 +12491,7 @@ CzMzK/T/ARwkqKGzzU0pAAAAAElFTkSuQmCC
 </div>
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 
 
@@ -12653,7 +12638,8 @@ IZ9ZmJlZIScLMzMr5GRhZmaFnCzMzKyQk4WZmRX6/xn+WbnyKoqEAAAAAElFTkSuQmCC
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -12715,7 +12701,8 @@ IZ9ZmJlZIScLMzMr5GRhZmaFnCzMzKyQk4WZmRX6/xn+WbnyKoqEAAAAAElFTkSuQmCC
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -12740,7 +12727,8 @@ IZ9ZmJlZIScLMzMr5GRhZmaFnCzMzKyQk4WZmRX6/xn+WbnyKoqEAAAAAElFTkSuQmCC
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -12766,7 +12754,8 @@ IZ9ZmJlZIScLMzMr5GRhZmaFnCzMzKyQk4WZmRX6/xn+WbnyKoqEAAAAAElFTkSuQmCC
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -12800,9 +12789,7 @@ IZ9ZmJlZIScLMzMr5GRhZmaFnCzMzKyQk4WZmRX6/xn+WbnyKoqEAAAAAElFTkSuQmCC
 
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Validación simple. Error: 0.32
@@ -12850,9 +12837,7 @@ Validación cruzada. Error: 0.30 (+/- 0.04)
 
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Confusion matrix, without normalization
@@ -12866,9 +12851,7 @@ Normalized confusion matrix
 </div>
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 
 
@@ -13073,9 +13056,7 @@ WYGcVM3MCuSkamZWICdVM7MCOamamRXISdXMrEBOqmZmBfr/p3VMpm7P3OAAAAAASUVORK5CYII=
 </div>
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 
 
@@ -13291,9 +13272,7 @@ mpkVyIHUzKxA/x/ld/3crz4gAAAAAABJRU5ErkJggg==
 </div>
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 
 
@@ -13304,9 +13283,7 @@ mpkVyIHUzKxA/x/ld/3crz4gAAAAAABJRU5ErkJggg==
 </div>
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 
 
@@ -13462,7 +13439,8 @@ gg==
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -13530,9 +13508,7 @@ gg==
 
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Validación simple. Error: 0.31
@@ -13548,9 +13524,7 @@ Normalized confusion matrix
 </div>
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 
 
@@ -13724,9 +13698,7 @@ GH/zAAAAAElFTkSuQmCC
 </div>
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 
 
@@ -13893,9 +13865,7 @@ BTggzcwKcECamRXw/wEdoe//NUBADQAAAABJRU5ErkJggg==
 </div>
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 
 
@@ -13906,9 +13876,7 @@ BTggzcwKcECamRXw/wEdoe//NUBADQAAAABJRU5ErkJggg==
 </div>
 
 <div class="output_area">
-
 <div class="prompt"></div>
-
 
 
 
@@ -14062,7 +14030,8 @@ YII=
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
