@@ -1,4 +1,4 @@
-import Clasificador
+import clasificadores.clasificador as Clasificador
 from matplotlib.colors import ListedColormap
 import numpy as np
 import matplotlib.pyplot as plt
