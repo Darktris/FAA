@@ -16,17 +16,19 @@ class ClasificadorVecinosProximos(Clasificador):
     def entrenamiento(self, datosTrain, atributosDiscretos, diccionario):
 
         self.atributos_continuos = np.logical_not(atributosDiscretos)
-        self.datos_normalizados_train = self.normalizarDatos(datosTrain)
+        self.datos_normalizados_train = self.normalizarDatos(datosTrain[:,:-1])
         self.clases_train = datosTrain[:, -1]
 
         return
 
     def clasifica(self, datosTest, atributosDiscretos, diccionario):
-        return np.fromiter(map(lambda record: self.__clasifica_uno__(record),datosTest))
+        return np.fromiter(map(lambda record: self.__clasifica_uno__(record),datosTest),dtype=float)
 
 
     def __clasifica_uno__(self, datoTest):
-        distancias = np.fromiter(map(lambda ejemplo: self.__distancia__(ejemplo,datoTest), self.datos_normalizados_train))
+        distancias = np.fromiter(map(lambda ejemplo: self.__distancia__(ejemplo,datoTest), self.datos_normalizados_train),dtype=float)
+        #TODO: Aserlo bien
+
         indices_vecinos = np.argmin(distancias)[:self.K]
         clases_vecinos = self.clases_train[indices_vecinos]
 
