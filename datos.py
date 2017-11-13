@@ -57,7 +57,6 @@ class Datos(object):
                     indices_actualizar = (self.datos[:, indice_diccionario] == diccionario[key])
                     self.datos[indices_actualizar, indice_diccionario] = float(indice_key)
                     diccionario[key] = float(indice_key)
-        
 
     def extraeDatosTrain(self, idx):
         return np.take(self.datos, idx, axis=0)

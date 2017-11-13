@@ -1,6 +1,6 @@
 import numpy as np
+
 from clasificadores.clasificador import Clasificador
-from collections import Counter
 
 
 class ClasificadorVecinosProximos(Clasificador):
@@ -16,23 +16,25 @@ class ClasificadorVecinosProximos(Clasificador):
     def entrenamiento(self, datosTrain, atributosDiscretos, diccionario):
 
         self.atributos_continuos = np.logical_not(atributosDiscretos)
-        self.datos_normalizados_train = self.normalizarDatos(datosTrain[:,:-1])
+        self.datos_normalizados_train = self.normalizarDatos(datosTrain[:, :-1])
         self.clases_train = datosTrain[:, -1]
 
         return
 
     def clasifica(self, datosTest, atributosDiscretos, diccionario):
-        return np.fromiter(map(lambda record: self.__clasifica_uno__(record),datosTest),dtype=float)
-
+        return np.fromiter(map(lambda record: self.__clasifica_uno__(record), datosTest), dtype=float)
 
     def __clasifica_uno__(self, datoTest):
-        distancias = np.fromiter(map(lambda ejemplo: self.__distancia__(ejemplo,datoTest), self.datos_normalizados_train),dtype=float)
-        #TODO: Aserlo bien
+        distancias = np.fromiter(
+            map(lambda ejemplo: self.__distancia__(ejemplo, datoTest),
+                self.datos_normalizados_train), dtype=float)
 
-        indices_vecinos = np.argmin(distancias)[:self.K]
+        indices_vecinos = np.argsort(distancias)[:self.K]
         clases_vecinos = self.clases_train[indices_vecinos]
 
-        return clases_vecinos.sort(key=Counter(clases_vecinos).get, reverse=True)[0]
+        unique, counts = np.unique(clases_vecinos, return_counts=True)
+
+        return unique[np.argmax(counts)]
 
     def calcularMedias(self, datostrain):
 

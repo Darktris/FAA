@@ -36,12 +36,13 @@ class Clasificador(object):
         predicciones = []
 
         for particion in self.particiones:
-            entrenamiento = dataset.extraeDatosTrain(particion.indicesTrain)
-            _validacion = dataset.extraeDatosTest(particion.indicesTrain)
-            y_test = _validacion[:, -1]
-            x_test = _validacion[:, :-1]
+            dataset_entrenamiento = dataset.extraeDatosTrain(particion.indicesTrain)
+            dataset_validacion = dataset.extraeDatosTest(particion.indicesTrain)
 
-            self.entrenamiento(entrenamiento, dataset.nominalAtributos, dataset.diccionarios)
+            x_test = dataset_validacion[:, :-1]
+            y_test = dataset_validacion[:, -1]
+
+            self.entrenamiento(dataset_entrenamiento, dataset.nominalAtributos, dataset.diccionarios)
             prediccion = self.clasifica(x_test, dataset.nominalAtributos, dataset.diccionarios)
 
             error = float(np.sum(prediccion != y_test)) / len(y_test)
