@@ -51,20 +51,18 @@ class ValidacionCruzada(EstrategiaParticionado):
 
         for particion, index in zip(self.particiones, range(self.nfolds)):
             particion.indicesTest = indices_particiones[index]
-            
-            def pegar(x,y):
-                return np.append(x,y)
-            
-            if index > 0 and index < len(self.particiones) -1:
-                indices_izq = reduce(pegar,indices_particiones[:index])
-                indices_dcha = reduce(pegar,indices_particiones[index+1:])
-                particion.indicesTrain = np.append(indices_izq,indices_dcha)
-            elif index ==0:
-                particion.indicesTrain = reduce(pegar,indices_particiones[1:])
+
+            def pegar(x, y):
+                return np.append(x, y)
+
+            if index > 0 and index < len(self.particiones) - 1:
+                indices_izq = reduce(pegar, indices_particiones[:index])
+                indices_dcha = reduce(pegar, indices_particiones[index + 1:])
+                particion.indicesTrain = np.append(indices_izq, indices_dcha)
+            elif index == 0:
+                particion.indicesTrain = reduce(pegar, indices_particiones[1:])
             else:
-                particion.indicesTrain = reduce(pegar,indices_particiones[:-1])
-                
-            
+                particion.indicesTrain = reduce(pegar, indices_particiones[:-1])
 
         self.numeroParticiones = self.nfolds
 

@@ -1,8 +1,9 @@
-import numpy as np
-from clasificadores.clasificador import Clasificador
-from numpy.linalg import norm
-import time
 import multiprocessing
+import numpy as np
+import time
+from numpy.linalg import norm
+
+from clasificadores.clasificador import Clasificador
 
 
 class __C__(object):
@@ -44,11 +45,12 @@ class ClasificadorVecinosProximos(Clasificador):
     def __clasifica_uno__(self, datoTest):
         start = time.clock()
 
-        pool = multiprocessing.Pool()
+        pool = multiprocessing.Pool(processes=4)
 
-        # Fancy optimization
-        distancias = pool.map(__C__(datoTest), self.datos_normalizados_train)
-        #                                               print(distancias)
+        # Fancy optimization :(
+        # distancias = pool.map(__C__(datoTest), self.datos_normalizados_train)
+        distancias = np.fromiter(map(lambda ejemplo: __distancia__(ejemplo, datoTest), self.datos_normalizados_train),
+                                 dtype=float)
 
         step_1 = time.clock()
         self.tramo_1 += step_1 - start
