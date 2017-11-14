@@ -2,10 +2,19 @@ import numpy as np
 from clasificadores.clasificador import Clasificador
 from numpy.linalg import norm
 import time
+import multiprocessing
+
+
+class __C__(object):
+    def __init__(self, datoTest):
+        self.datoTest = datoTest
+
+    def __call__(self, src):
+        return __distancia__(src, self.datoTest)
+
 
 class ClasificadorVecinosProximos(Clasificador):
     K = 5
-    p = 2
 
     tramo_1 = 0.
     tramo_2 = 0.
@@ -34,20 +43,26 @@ class ClasificadorVecinosProximos(Clasificador):
 
     def __clasifica_uno__(self, datoTest):
         start = time.clock()
-        distancias = np.fromiter(
-            map(lambda ejemplo: self.__distancia__(ejemplo, datoTest),
-                self.datos_normalizados_train), dtype=float)
-        step_1 = time.clock()
-        self.tramo_1 += step_1-start
 
-        indices_vecinos = np.argsort(distancias)[:self.K]
+        pool = multiprocessing.Pool()
+
+        # Fancy optimization
+        distancias = pool.map(__C__(datoTest), self.datos_normalizados_train)
+        #                                               print(distancias)
+
+        step_1 = time.clock()
+        self.tramo_1 += step_1 - start
+
+        indices_vecinos = np.argpartition(distancias, kth=self.K)[:self.K]
+
         clases_vecinos = self.clases_train[indices_vecinos]
         step_2 = time.clock()
-        self.tramo_2 += step_2-step_1
+        self.tramo_2 += step_2 - step_1
 
         unique, counts = np.unique(clases_vecinos, return_counts=True)
         step_3 = time.clock()
-        self.tramo_3 += step_3-step_2
+
+        self.tramo_3 += step_3 - step_2
 
         return unique[np.argmax(counts)]
 
@@ -68,8 +83,6 @@ class ClasificadorVecinosProximos(Clasificador):
         medias, desv_est = self.calcularMedias(datos)
         return (datos - medias) / desv_est
 
-    def __distancia__(self, vector_1, vector_2):
-        start = time.clock()
-        res = norm(vector_1 - vector_2, ord=self.p)
-        #print("dist:",time.clock() - start)
-        return res
+
+def __distancia__(vector_1, vector_2):
+    return norm(vector_1 - vector_2, ord=2)

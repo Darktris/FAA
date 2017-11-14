@@ -18,7 +18,6 @@ def plotModel(x, y, clase, clf, title, diccionarios):
     xx, yy = np.meshgrid(np.arange(x_min, x_max, hx), np.arange(y_min, y_max, hy))
 
     if isinstance(clf, Clasificador.Clasificador):
-        start = time.clock()
         z = clf.clasifica(np.c_[xx.ravel(), yy.ravel()], [False, False, True], diccionarios)
         print("tramo1:",clf.tramo_1)
         print("tramo2:",clf.tramo_2)
