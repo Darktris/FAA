@@ -1,6 +1,7 @@
-import multiprocessing
-import numpy as np
+# import multiprocessing
 import time
+
+import numpy as np
 from numpy.linalg import norm
 
 from clasificadores.clasificador import Clasificador
@@ -15,19 +16,15 @@ class __C__(object):
 
 
 class ClasificadorVecinosProximos(Clasificador):
-    K = 5
-
-    tramo_1 = 0.
-    tramo_2 = 0.
-    tramo_3 = 0.
-    tramo_4 = 0.
-
     probabilidades = []
 
     datos_train = None
     datos_normalizados_train = None
     clases_train = None
     atributos_continuos = None
+
+    def __init__(self, K=5):
+        self.K = K
 
     def entrenamiento(self, datosTrain, atributosDiscretos, diccionario):
 
@@ -45,7 +42,7 @@ class ClasificadorVecinosProximos(Clasificador):
     def __clasifica_uno__(self, datoTest):
         start = time.clock()
 
-        pool = multiprocessing.Pool(processes=4)
+        # pool = multiprocessing.Pool(processes=4)
 
         # Fancy optimization :(
         # distancias = pool.map(__C__(datoTest), self.datos_normalizados_train)
@@ -53,18 +50,14 @@ class ClasificadorVecinosProximos(Clasificador):
                                  dtype=float)
 
         step_1 = time.clock()
-        self.tramo_1 += step_1 - start
 
         indices_vecinos = np.argpartition(distancias, kth=self.K)[:self.K]
 
         clases_vecinos = self.clases_train[indices_vecinos]
         step_2 = time.clock()
-        self.tramo_2 += step_2 - step_1
 
         unique, counts = np.unique(clases_vecinos, return_counts=True)
         step_3 = time.clock()
-
-        self.tramo_3 += step_3 - step_2
 
         return unique[np.argmax(counts)]
 
