@@ -63,3 +63,16 @@ class Datos(object):
 
     def extraeDatosTest(self, idx):
         return np.take(self.datos, idx, axis=0)
+
+    def extraeDatosRelevantes(self,idx):
+        return np.take(self.datos, idx, axis=1)
+
+    def diccionarioRelevante(self,idx):
+        return np.take(self.diccionarios, idx, axis=0)
+
+    def atribDiscretosRelevante(self,idx):
+        return np.take(self.nominalAtributos, idx, axis=0)
+
+    def tipoAtribDiscretosRelevante(self,idx):
+        return np.take(self.tipoAtributos, idx, axis=0)
+
