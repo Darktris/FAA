@@ -23,14 +23,18 @@ class ClasificadorVecinosProximos(Clasificador):
     clases_train = None
     atributos_continuos = None
 
-    def __init__(self, K=5):
+    def __init__(self, K=5,normalizar=True):
         self.K = K
+        self.normalizar = normalizar
 
     def entrenamiento(self, datosTrain, atributosDiscretos, diccionario):
 
         self.atributos_continuos = np.logical_not(atributosDiscretos)
         self.datos_train = datosTrain[:, :-1]
-        self.datos_normalizados_train = self.normalizarDatos(datosTrain[:, :-1])
+        if self.normalizar:
+            self.datos_normalizados_train = self.normalizarDatos(datosTrain[:, :-1])
+        else:
+            self.datos_normalizados_train = datosTrain[:, :-1]
 
         self.clases_train = datosTrain[:, -1]
 

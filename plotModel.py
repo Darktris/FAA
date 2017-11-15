@@ -19,9 +19,7 @@ def plotModel(x, y, clase, clf, title, diccionarios):
 
     if isinstance(clf, Clasificador.Clasificador):
         z = clf.clasifica(np.c_[xx.ravel(), yy.ravel()], [False, False, True], diccionarios)
-        print("tramo1:", clf.tramo_1)
-        print("tramo2:", clf.tramo_2)
-        print("tramo3:", clf.tramo_3)
+
     elif hasattr(clf, "decision_function"):
         z = clf.decision_function(np.c_[xx.ravel(), yy.ravel()])
     else:
