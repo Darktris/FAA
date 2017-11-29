@@ -71,8 +71,8 @@ class Datos(object):
         return np.append(np.take(self.diccionarios, idx, axis=0),self.diccionarios[-1])
 
     def atribDiscretosRelevante(self,idx):
-        return np.take(self.nominalAtributos, idx, axis=0)
+        return np.append(np.take(self.nominalAtributos, idx, axis=0),self.nominalAtributos[-1])
 
     def tipoAtribDiscretosRelevante(self,idx):
-        return np.take(self.tipoAtributos, idx, axis=0)
+        return np.append(np.take(self.tipoAtributos, idx, axis=0),self.tipoAtributos[-1])
 
