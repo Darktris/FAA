@@ -65,10 +65,10 @@ class Datos(object):
         return np.take(self.datos, idx, axis=0)
 
     def extraeDatosRelevantes(self,idx):
-        return np.take(self.datos, idx, axis=1)
+        return np.vstack((np.take(self.datos, idx, axis=1),self.datos[:,-1]))
 
     def diccionarioRelevante(self,idx):
-        return np.take(self.diccionarios, idx, axis=0)
+        return np.append(np.take(self.diccionarios, idx, axis=0),self.diccionarios[-1])
 
     def atribDiscretosRelevante(self,idx):
         return np.take(self.nominalAtributos, idx, axis=0)
