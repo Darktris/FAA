@@ -2,6 +2,7 @@ import numpy as np
 from estrategiasparticionado.validacion_simple import ValidacionSimple
 from copy import deepcopy
 
+
 class PreprocesamientoAG:
     clasificador = None
     datos = None
@@ -19,29 +20,28 @@ class PreprocesamientoAG:
         self.probabilidad_mutacion_un_bit = probabilidad_mutacion_un_bit
         self.proporcion_elitismo = proporcion_elitismo
         self.tamano_poblacion = tamano_poblacion
-        self.max_generaciones=max_generaciones
-        self.max_fitness=max_fitness
+        self.max_generaciones = max_generaciones
+        self.max_fitness = max_fitness
         self.dataset_aux = None
 
-    def seleccionarAtributos(self,dataset, clasificador):
+    def seleccionarAtributos(self, dataset, clasificador):
 
         generaciones = 0
         fitness = 0.
         estrategia = ValidacionSimple()
         self.dataset_aux = deepcopy(dataset)
 
-
         # Poblacion aleatoria
-        poblacion = np.random.choice([True,False],(self.tamano_poblacion,dataset.datos.shape[1]-1))
+        poblacion = np.random.choice([True, False], (self.tamano_poblacion, dataset.datos.shape[1] - 1))
 
         # mientras fitness < max_fitnes o generaciones < max_generaciones
-        while fitness<self.max_fitness or generaciones< self.max_generaciones:
-
+        while fitness < self.max_fitness or generaciones < self.max_generaciones:
             # Seleccion de progenitores (se reduce el tamano al 60% )
-            indices_progenitores, puntuaciones = self.seleccion_progenitores(dataset,clasificador,poblacion,estrategia)
+            indices_progenitores, puntuaciones = self.seleccion_progenitores(dataset, clasificador, poblacion,
+                                                                             estrategia)
 
-            tamano_elite = int(np.floor(self.tamano_poblacion*self.proporcion_elitismo))
-            indices_elite = np.argpartition(puntuaciones,tamano_elite)[:tamano_elite]
+            indices_elite = np.argsort(puntuaciones)
+            elite = poblacion[indices_elite]
 
             # Cruce
             sucesores = self.cruzar_progenitores(poblacion[indices_progenitores])
@@ -49,30 +49,51 @@ class PreprocesamientoAG:
             # Mutacion
             mutantes = self.mutar(sucesores)
 
-            # Seleccionar supervivientes
-            # TODO
-            generaciones+=1
+            # Construccion de la siguiente generacion
+            nueva_generacion = np.ndarray(shape=poblacion.shape)
 
-    def seleccion_progenitores(self,dataset,clasificador,poblacion,estrategia):
+            numero_nuevos_individuos = mutantes.shape[0]
+            numero_individuos_heredados = self.tamano_poblacion - numero_nuevos_individuos
+
+            nueva_generacion[:numero_nuevos_individuos] = mutantes
+            nueva_generacion[numero_nuevos_individuos:self.tamano_poblacion] = elite[:numero_individuos_heredados]
+
+            # Actualizamos la poblacion con la nueva generacion
+            poblacion = nueva_generacion
+
+            generaciones += 1
+
+        return poblacion
+
+    def seleccion_progenitores(self, dataset, clasificador, poblacion, estrategia):
 
         puntuaciones = np.zeros(self.tamano_poblacion)
 
+        print("\n\nSeleccion")
         # Evaluamos cada individuo de la poblacion
         for indice_individuo in range(puntuaciones.shape[0]):
-            print("Individuo;", poblacion[indice_individuo])
 
             datos_relevantes = dataset.extraeDatosRelevantes(poblacion[indice_individuo])
-            diccionario_relevante = dataset.extraeDatosRelevantes(poblacion[indice_individuo])
-            tipoAtributos_relevante = dataset.tipoAtribDiscretosRelevante(poblacion[indice_individuo])
-            nominalAtributos_relevante = dataset.atribDiscretosRelevante(poblacion[indice_individuo])
+            diccionarios_relevantes = dataset.diccionarioRelevante(poblacion[indice_individuo])
+            tipoAtributos_relevantes = dataset.tipoAtribDiscretosRelevante(poblacion[indice_individuo])
+            nominalAtributos_relevantes = dataset.atribDiscretosRelevante(poblacion[indice_individuo])
 
             # Rellenamos el dataset auxiliar
             self.dataset_aux.datos = datos_relevantes
-            self.dataset_aux.diccionario = diccionario_relevante
-            self.dataset_aux.tipoAtributos = tipoAtributos_relevante
-            self.dataset_aux.nominalAtributos = nominalAtributos_relevante
+            self.dataset_aux.diccionarios = diccionarios_relevantes
+            self.dataset_aux.tipoAtributos = tipoAtributos_relevantes
+            self.dataset_aux.nominalAtributos = nominalAtributos_relevantes
+
+            # print("Individuo:",poblacion[indice_individuo])
+            # print("Datos:",self.dataset_aux.datos.shape)
+            # print("Dicc:",self.dataset_aux.diccionarios)
+            # print("Tipos:",self.dataset_aux.tipoAtributos)
+            # print("nominal:",self.dataset_aux.nominalAtributos)
 
             clasificador.validacion(estrategia, self.dataset_aux)
+
+            print("Individuo:", poblacion[indice_individuo])
+            print("\n>>>Fitness:", 1-clasificador.errores[0])
 
             puntuaciones[indice_individuo] = clasificador.errores[0]
 
@@ -83,28 +104,28 @@ class PreprocesamientoAG:
 
         return weighted_randomizer.random_array(tamano_progenitores), puntuaciones
 
-    def cruzar_progenitores(self,progenitores):
+    def cruzar_progenitores(self, progenitores):
         sucesores = np.ndarray(shape=progenitores.shape)
 
         indices_permutacion = np.random.permutation(progenitores.shape[0])
+        max_indice = int(np.floor(progenitores.shape[0] / 2))
 
-        for index in range(progenitores.shape[0] / 2):
-            progenitor_1 = progenitores[indices_permutacion[2*index]]
-            progenitor_2 = progenitores[indices_permutacion[2*index+1]]
+        for index in range(max_indice):
+            progenitor_1 = progenitores[indices_permutacion[2 * index]]
+            progenitor_2 = progenitores[indices_permutacion[2 * index + 1]]
 
-            sucesores[2*index] = self.__cruzar_progenitores(progenitor_1,progenitor_2)
-            sucesores[2*index+1] = self.__cruzar_progenitores(progenitor_1,progenitor_2)
+            sucesores[2 * index] = self.__cruzar_progenitores(progenitor_1, progenitor_2)
+            sucesores[2 * index + 1] = self.__cruzar_progenitores(progenitor_1, progenitor_2)
 
         return sucesores
 
+    def __cruzar_progenitores(self, progenitor_1, progenitor_2):
 
-    def __cruzar_progenitores(self,progenitor_1,progenitor_2):
+        v_a = np.random.choice([True, False], size=progenitor_1.shape[0])
 
-        v_a = np.random.choice([True,False],size=progenitor_1.shape[0])
+        return np.logical_or(np.logical_and(v_a,progenitor_1),np.logical_and(np.logical_not(v_a),progenitor_2))
 
-        return (v_a and progenitor_1) or (not v_a and progenitor_2)
-
-    def mutar(self,sucesores):
+    def mutar(self, sucesores):
         mutantes = np.ndarray(shape=sucesores.shape)
 
         for index in range(sucesores.shape[0]):
@@ -112,23 +133,24 @@ class PreprocesamientoAG:
 
         return mutantes
 
-    def mutar_uno(self,sucesor):
-        return np.fromiter(map(self.f_mut,sucesor),dtype=bool)
+    def mutar_uno(self, sucesor):
+        return np.fromiter(map(self.f_mut, sucesor), dtype=bool)
 
-    def f_mut(self,bit):
+    def f_mut(self, bit):
         if np.random.uniform() <= self.probabilidad_mutacion_un_bit:
             return not bit
         else:
             return bit
 
+
 class WeightedRandomizer:
-    def __init__ (self, weights):
+    def __init__(self, weights):
         self.__max = .0
         self.__weights = []
 
         for index, weight in enumerate(weights):
             self.__max += weight
-            self.__weights.append ( (self.__max, index) )
+            self.__weights.append((self.__max, index))
 
     def random(self):
         r = np.random.random() * self.__max
@@ -136,5 +158,5 @@ class WeightedRandomizer:
             if weight > r:
                 return index
 
-    def random_array(self,size):
+    def random_array(self, size):
         return np.asarray([self.random() for _ in range(size)])
