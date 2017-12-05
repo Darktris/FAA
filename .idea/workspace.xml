@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1437f24f-7fc9-408e-9734-f2cdffb93a84" name="Default" comment="Finished P2">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Practica_3.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Practica_3.ipynb" />
+    <list default="true" id="1437f24f-7fc9-408e-9734-f2cdffb93a84" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Practica_2.ipynb" afterPath="$PROJECT_DIR$/Practica_2.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/clasificadores/clasificador_regresion_logistica.py" afterPath="$PROJECT_DIR$/clasificadores/clasificador_regresion_logistica.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/preprocesamientoag/preprocesamiento_ag.py" afterPath="$PROJECT_DIR$/preprocesamientoag/preprocesamiento_ag.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Practica_3.html" afterPath="$PROJECT_DIR$/Practica_3.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Practica_3.ipynb" afterPath="$PROJECT_DIR$/Practica_3.ipynb" />
     </list>
     <ignored path="FAA.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,8 +28,8 @@
       <file leaf-file-name="preprocesamiento_ag.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/preprocesamientoag/preprocesamiento_ag.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="413">
-              <caret line="76" column="62" selection-start-line="76" selection-start-column="62" selection-end-line="76" selection-end-column="62" />
+            <state relative-caret-position="548">
+              <caret line="100" column="15" selection-start-line="100" selection-start-column="15" selection-end-line="100" selection-end-column="15" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -348,7 +345,14 @@
       <option name="project" value="LOCAL" />
       <updated>1511967335723</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Se han hecho varias pruebas, no se consigue alcanzar un 95% de fitness. Se debe estudiar una manera de aumentar la variabilidad.">
+      <created>1512480741938</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1512480741938</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -394,7 +398,8 @@
     <MESSAGE value="KNN is finished. Solving minor issues related to throughput" />
     <MESSAGE value="Finished P2" />
     <MESSAGE value="Implementando el algoritmo genetico para la seleccion de atributos" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implementando el algoritmo genetico para la seleccion de atributos" />
+    <MESSAGE value="Se han hecho varias pruebas, no se consigue alcanzar un 95% de fitness. Se debe estudiar una manera de aumentar la variabilidad." />
+    <option name="LAST_COMMIT_MESSAGE" value="Se han hecho varias pruebas, no se consigue alcanzar un 95% de fitness. Se debe estudiar una manera de aumentar la variabilidad." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -459,8 +464,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/preprocesamientoag/preprocesamiento_ag.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="76" column="62" selection-start-line="76" selection-start-column="62" selection-end-line="76" selection-end-column="62" />
+        <state relative-caret-position="548">
+          <caret line="100" column="15" selection-start-line="100" selection-start-column="15" selection-end-line="100" selection-end-column="15" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
