@@ -30,8 +30,14 @@ class ClasificadorRegresionLogistica(Clasificador):
 
     def sigmoidal(self, sample):
         x_real = np.insert(sample, 0, 1.0, axis=0)
+        np.seterr(over='raise')
         prod_escalar = np.dot(x_real, self.w)
-        return 1 / (1 + np.exp(-prod_escalar))
+        try:
+            ret = 1 / (1 + np.exp(-prod_escalar))
+        except:
+            return 0.0
+
+        return ret
 
     def clasifica(self, datostest, atributosDiscretos, diccionario):
 
