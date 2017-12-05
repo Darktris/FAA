@@ -352,7 +352,14 @@
       <option name="project" value="LOCAL" />
       <updated>1512480741938</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Se han hecho varias pruebas, no se consigue alcanzar un 95% de fitness. Se debe estudiar una manera de aumentar la variabilidad.">
+      <created>1512481233116</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1512481233116</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
