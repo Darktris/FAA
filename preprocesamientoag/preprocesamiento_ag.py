@@ -56,7 +56,8 @@ class PreprocesamientoAG:
 
             indices_elite = np.argsort(-puntuaciones)
             elite = poblacion[indices_elite]
-
+            fitness = puntuaciones[indices_elite[0]]
+            
             self.puntuacion = puntuaciones[indices_elite][0]
             self.atributos_seleccionados = poblacion[indices_elite][0]
 
