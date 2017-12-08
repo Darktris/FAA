@@ -24,7 +24,10 @@ class PreprocesamientoAG:
         self.max_fitness = max_fitness
         self.dataset_aux = None
 
-    def seleccionarAtributos(self, dataset, clasificador):
+        self.puntuacion = 0.
+        self.atributos_seleccionados = None
+
+    def seleccionarAtributos(self, dataset, clasificador,quiet=True):
 
         generaciones = 0
         fitness = 0.
@@ -44,28 +47,30 @@ class PreprocesamientoAG:
         # mientras fitness < max_fitnes o generaciones < max_generaciones
         while fitness < self.max_fitness and generaciones < self.max_generaciones:
 
-            tiempo_base = time.clock()
+            # tiempo_base = time.clock()
             # Seleccion de progenitores (se reduce el tamano al 60% )
             indices_progenitores, puntuaciones = self.seleccion_progenitores(dataset, clasificador, poblacion,
                                                                              estrategia)
 
-            tiempo_evolucion = time.clock()
+            # tiempo_evolucion = time.clock()
 
             indices_elite = np.argsort(-puntuaciones)
             elite = poblacion[indices_elite]
 
-            tiempo_seleccion = time.clock()
+            self.puntuacion = puntuaciones[indices_elite][0]
+            self.atributos_seleccionados = poblacion[indices_elite][0]
+
+            # tiempo_seleccion = time.clock()
 
             # Cruce
             sucesores = self.cruzar_progenitores(poblacion[indices_progenitores])
 
-            tiempo_cruce = time.clock()
+            # tiempo_cruce = time.clock()
 
             # Mutacion
             mutantes = self.mutar(sucesores)
 
-
-            tiempo_mutacion = time.clock()
+            # tiempo_mutacion = time.clock()
 
             # Construccion de la siguiente generacion
             nueva_generacion = np.ndarray(shape=poblacion.shape)
@@ -76,43 +81,46 @@ class PreprocesamientoAG:
             nueva_generacion[:numero_nuevos_individuos] = mutantes
             nueva_generacion[numero_nuevos_individuos:self.tamano_poblacion] = elite[:numero_individuos_heredados]
 
-            tiempo_construccion = time.clock()
+            # tiempo_construccion = time.clock()
 
             ######################################################################
             ######################################################################
             ######################################################################
             ######################################################################
 
-            print("######################################################################")
-            print("\nGeneracion:", generaciones+1)
-
-            print("Tiempo evolucion:",tiempo_evolucion-tiempo_base)
-            print("Tiempo seleccion:",tiempo_seleccion-tiempo_evolucion)
-            print("Tiempo cruce:",tiempo_cruce-tiempo_seleccion)
-            print("Tiempo mutacion:",tiempo_mutacion-tiempo_cruce)
-            print("Tiempo construccion:",tiempo_construccion-tiempo_mutacion)
-
-            for ranking, indice_individuo in enumerate(indices_elite):
-                if list(poblacion[indice_individuo]) in historic:
-                    print("(Repetido) Rank:", 1+ranking,
-                          "Fitness:", puntuaciones[indice_individuo],
-                          "Hash", poblacion[indice_individuo].sum(),
-                          "Genotipo:", poblacion[indice_individuo][:5])
-                else:
-                    historic.append(list(poblacion[indice_individuo]))
-                    print("Rank:", 1+ranking,
-                          "Fitness:", puntuaciones[indice_individuo],
-                          "Hash", poblacion[indice_individuo].sum(),
-                          "Genotipo:", poblacion[indice_individuo][:5])
-
-            variabilidades.append(len(historic))
-            historico_best_fits.append(puntuaciones[indices_elite][0])
-            print("Variabilidad=", len(historic))
+            # print("######################################################################")
+            # print("\nGeneracion:", generaciones+1)
+            #
+            # print("Tiempo evolucion:",tiempo_evolucion-tiempo_base)
+            # print("Tiempo seleccion:",tiempo_seleccion-tiempo_evolucion)
+            # print("Tiempo cruce:",tiempo_cruce-tiempo_seleccion)
+            # print("Tiempo mutacion:",tiempo_mutacion-tiempo_cruce)
+            # print("Tiempo construccion:",tiempo_construccion-tiempo_mutacion)
+            #
+            # for ranking, indice_individuo in enumerate(indices_elite):
+            #     if list(poblacion[indice_individuo]) in historic:
+            #         print("(Repetido) Rank:", 1+ranking,
+            #               "Fitness:", puntuaciones[indice_individuo],
+            #               "Hash", poblacion[indice_individuo].sum(),
+            #               "Genotipo:", poblacion[indice_individuo][:5])
+            #     else:
+            #         historic.append(list(poblacion[indice_individuo]))
+            #         print("Rank:", 1+ranking,
+            #               "Fitness:", puntuaciones[indice_individuo],
+            #               "Hash", poblacion[indice_individuo].sum(),
+            #               "Genotipo:", poblacion[indice_individuo][:5])
+            #
+            # variabilidades.append(len(historic))
+            # historico_best_fits.append(puntuaciones[indices_elite][0])
+            # print("Variabilidad=", len(historic))
 
             ######################################################################
             ######################################################################
             ######################################################################
             ######################################################################
+
+            if not quiet:
+                print("Generacion:",generaciones+1,"Mediana puntuacion:",np.median(puntuaciones))
 
             # Actualizamos la poblacion con la nueva generacion
             poblacion = nueva_generacion
